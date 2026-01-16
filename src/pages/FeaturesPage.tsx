@@ -37,7 +37,7 @@ export default function FeaturesPage() {
             </div>
             <p className="text-gray-600 dark:text-gray-400">
               {isHebrew
-                ? 'גישה ציבורית להנחיות חירום, טריאז' מיידי והפנייה מהירה לשירותי חירום. המערכת מספקת הוראות עזרה ראשונה צעד אחר צעד בלי לבצע אבחון רפואי.'
+                ? 'גישה ציבורית להנחיות חירום, טריאז מיידי והפנייה מהירה לשירותי חירום. המערכת מספקת הוראות עזרה ראשונה צעד אחר צעד בלי לבצע אבחון רפואי.'
                 : 'Public access to emergency guidance, immediate triage, and rapid escalation to emergency services. Provides step-by-step first aid instructions without making medical diagnoses.'}
             </p>
           </div>
