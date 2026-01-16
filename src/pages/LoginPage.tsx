@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/types';
@@ -67,12 +68,20 @@ export default function LoginPage() {
 
           {/* Password */}
           <div>
-            <label 
-              htmlFor="password" 
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              {t('auth.password')}
-            </label>
+            <div className="flex justify-between items-center mb-2">
+              <label 
+                htmlFor="password" 
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                {t('auth.password')}
+              </label>
+              <Link
+                to="/forgot-password"
+                className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                {t('auth.forgotPassword')}
+              </Link>
+            </div>
             <input
               id="password"
               type="password"

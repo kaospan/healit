@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/types';
+import ChatInterface from '@/components/ChatInterface';
 
 /**
  * Dashboard Page
  * 
- * @description Main dashboard with role-based navigation
+ * @description Main dashboard with ChatGPT-style assistant and role-based navigation
  */
 export default function DashboardPage() {
   const { user, signOut, isDoctor, isStaff, isAdmin, isPatient } = useAuth();
@@ -83,13 +84,22 @@ export default function DashboardPage() {
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
             {language === Language.HEBREW
-              ? 'בחר פעולה מהרשימה למטה'
-              : 'Select an action from the list below'}
+              ? 'דבר עם העוזר הדיגיטלי או בחר פעולה מהרשימה למטה'
+              : 'Chat with the digital assistant or select an action from the list below'}
           </p>
         </div>
 
+        {/* Chat Interface - Main Feature */}
+        <div className="mb-8">
+          <ChatInterface userName={user?.full_name} />
+        </div>
+
         {/* Navigation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            {language === Language.HEBREW ? 'גישה מהירה' : 'Quick Access'}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Emergency - Public Access */}
           <Link
             to="/emergency"
@@ -159,6 +169,7 @@ export default function DashboardPage() {
               </p>
             </Link>
           )}
+        </div>
         </div>
 
         {/* System Info */}

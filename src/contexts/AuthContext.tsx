@@ -10,6 +10,8 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName: string, role: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
+  sendPasswordResetEmail: (email: string) => Promise<void>;
+  resetPassword: (newPassword: string) => Promise<void>;
   isDoctor: boolean;
   isStaff: boolean;
   isAdmin: boolean;
@@ -162,6 +164,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(null);
   }
 
+  async function sendPasswordResetEmail(email: string) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    if (error) throw error;
+
+    await logAuditEvent({
+      userId: 'anonymous',
+      actionType: 'password_reset_requested',
+      resourceType: 'auth',
+      resourceId: email,
+      details: { email },
+    });
+  }
+
+  async function resetPassword(newPassword: string) {
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error) throw error;
+
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+    
+    if (currentUser) {
+      await logAuditEvent({
+        userId: currentUser.id,
+        actionType: 'password_reset_completed',
+        resourceType: 'auth',
+        resourceId: currentUser.id,
+        details: {},
+      });
+    }
+  }
+
   const value: AuthContextValue = {
     user,
     session,
@@ -169,6 +207,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signIn,
     signUp,
     signOut,
+    sendPasswordResetEmail,
+    resetPassword,
     isDoctor: user?.role === UserRole.DOCTOR,
     isStaff: user?.role === UserRole.STAFF,
     isAdmin: user?.role === UserRole.ADMIN,
